@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+:root {
+  --bg-color: #FAF4E1; /* Warm earth tone */
+  --text-primary: #3B3024;
+  --accent-color: #8C6A4B;
+  --box-bg: #FFFFFF;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: var(--box-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  width: 400px;
+  text-align: center;
+}
+
+.title {
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+}
+
+.login-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent-color);
+  color: white;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.log-box {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f0ebe1;
+  border-radius: 8px;
+  height: 200px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.log-box p {
+  margin: 5px 0;
+  border-bottom: 1px solid #e0d9cc;
+  padding-bottom: 5px;
+}
+
+.fire { background-color: #C0392B; }
+.water { background-color: #2980B9; }
+.leaf { background-color: #27AE60; }

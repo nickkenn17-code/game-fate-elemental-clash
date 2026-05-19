@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # 1. State Management
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  # 2. Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # 3. Main Web Server
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: python3 app.py
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
+
+  # 4. Background Game Logic Calculator
+  worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: python3 worker.py
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
+
+  # 5. User Interface
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
