@@ -1,90 +1,189 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&display=swap');
 
 :root {
-  --bg-color: #FAF4E1; /* Warm earth tone */
-  --text-primary: #3B3024;
-  --accent-color: #8C6A4B;
-  --box-bg: #FFFFFF;
+  /* Earth-Tone Palette */
+  --bg-color: #F4F1DE;        /* Warm Cream */
+  --card-bg: #FFFFFF;
+  --text-main: #3D405B;       /* Deep Slate */
+  --accent-green: #81B29A;    /* Muted Sage */
+  --accent-orange: #E07A5F;   /* Terracotta */
+  --accent-yellow: #F2CC8F;   /* Sand */
 }
 
 body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
   background-color: var(--bg-color);
-  color: var(--text-primary);
+  color: var(--text-main);
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
 }
 
 .container {
-  background-color: var(--box-bg);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  width: 400px;
-  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
 }
 
+/* Card UI Structure */
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Typography */
 .title {
-  color: var(--accent-color);
-  margin-bottom: 1.5rem;
+  font-family: 'Shrikhand', cursive;
+  color: var(--accent-orange);
+  font-size: 2.8rem;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 30px;
 }
 
-.login-box {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+h2, h3 {
+  margin-top: 0;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
+.room-title {
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 2px solid var(--bg-color);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+/* Form Inputs */
 input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-family: inherit;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border: 2px solid var(--bg-color);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
 }
 
+input:focus {
+  outline: none;
+  border-color: var(--accent-green);
+}
+
+/* Buttons */
 button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  background-color: var(--accent-color);
-  color: white;
-  font-family: inherit;
-  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  border: none;
+  border-radius: 8px;
+  transition: transform 0.1s, opacity 0.2s;
 }
 
-button:hover {
-  opacity: 0.85;
+button:active {
+  transform: scale(0.97);
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--accent-green);
+  color: white;
+  font-size: 1.1rem;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
 }
 
 .button-group {
   display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-top: 15px;
+  justify-content: center;
 }
 
-.log-box {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f0ebe1;
-  border-radius: 8px;
-  height: 200px;
-  overflow-y: auto;
-  text-align: left;
+.action-btn {
+  flex: 1;
+  padding: 15px 10px;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-size: 1rem;
+  border: 2px solid transparent;
+}
+
+.action-btn:hover {
+  background-color: var(--accent-yellow);
+}
+
+/* Element Specific Button Colors */
+.fire { border-color: var(--accent-orange); }
+.water { border-color: #6C8EBF; }
+.leaf { border-color: var(--accent-green); }
+
+/* Health Bars */
+.hp-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hp-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hp-label {
+  font-weight: 600;
   font-size: 0.9rem;
 }
 
-.log-box p {
-  margin: 5px 0;
-  border-bottom: 1px solid #e0d9cc;
-  padding-bottom: 5px;
+.hp-track {
+  width: 100%;
+  height: 22px;
+  background: var(--bg-color);
+  border-radius: 11px;
+  overflow: hidden;
 }
 
-.fire { background-color: #C0392B; }
-.water { background-color: #2980B9; }
-.leaf { background-color: #27AE60; }
+.hp-fill {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.p1-fill { background-color: var(--accent-green); }
+.p2-fill { background-color: var(--accent-orange); }
+
+/* Turn Indicator */
+.turn-indicator {
+  text-align: center;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 8px;
+}
+.is-attacker { background-color: rgba(224, 122, 95, 0.1); color: var(--accent-orange); }
+.is-defender { background-color: rgba(129, 178, 154, 0.1); color: var(--accent-green); }
+
+/* Combat Log */
+.log-box {
+  height: 200px;
+  overflow-y: auto;
+  background-color: #FAFAFA;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.log-entry {
+  margin: 8px 0;
+  border-bottom: 1px solid var(--bg-color);
+  padding-bottom: 8px;
+}

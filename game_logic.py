@@ -1,39 +1,33 @@
-def resolve_rpc(player1_choice, player2_choice):
-    """
-    Determines the attacker based on Rock-Paper-Scissors.
-    Returns 'player1', 'player2', or 'tie'.
-    """
-    if player1_choice == player2_choice:
+def resolve_rpc(p1_choice, p2_choice):
+    """Determines the winner of the priority phase."""
+    winning_moves = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
+    
+    if p1_choice == p2_choice:
         return 'tie'
-    
-    # Define the winning scenarios for Player 1
-    p1_wins = (
-        (player1_choice == 'rock' and player2_choice == 'scissors') or
-        (player1_choice == 'scissors' and player2_choice == 'paper') or
-        (player1_choice == 'paper' and player2_choice == 'rock')
-    )
-    
-    if p1_wins:
+    elif winning_moves.get(p1_choice) == p2_choice:
         return 'player1'
     else:
         return 'player2'
 
-def calculate_damage(attacker_element, defender_element):
+def calculate_combat(attacker_element, defender_element):
     """
-    Calculates damage based on Fate element matchups.
-    Water beats Fire, Fire beats Leaf, Leaf beats Water.
+    Calculates the HP deduction based on the Elemental Triangle.
+    Returns: (damage_to_defender, damage_to_attacker)
     """
+    # 1. Elemental Tie
     if attacker_element == defender_element:
-        return 2 # Same element clashes deal 2 damage
-        
-    # Define when the Attacker has the elemental advantage
-    attacker_advantage = (
-        (attacker_element == 'water' and defender_element == 'fire') or
-        (attacker_element == 'fire' and defender_element == 'leaf') or
-        (attacker_element == 'leaf' and defender_element == 'water')
-    )
+        return (10, 0) # Only the attacker deals 10 damage
+
+    # 2. Attacker Advantage (Critical Hit)
+    # Notice we updated 'earth' to 'leaf' to perfectly match your React UI!
+    advantage = {
+        'fire': 'leaf',
+        'leaf': 'water',
+        'water': 'fire'
+    }
     
-    if attacker_advantage:
-        return 3 # Advantage deals maximum damage (3)
-    else:
-        return 1 # Disadvantage means the attack is weak (1)
+    if advantage.get(attacker_element) == defender_element:
+        return (35, 0) # Attacker deals 35 damage
+
+    # 3. Defender Advantage (Counter-Attack)
+    return (0, 20) # Attacker takes 20 damage
