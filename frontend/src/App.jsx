@@ -13,6 +13,7 @@ function App() {
   const [log, setLog] = useState(['Welcome to the Holy Grail War.']);
   const [attacker, setAttacker] = useState(null);
   const [playerName, setPlayerName] = useState('');
+  const [showRules, setShowRules] = useState(false);
 
   // Health Bar State
   const [p1Hp, setP1Hp] = useState(100);
@@ -104,11 +105,12 @@ function App() {
     setLog(['Welcome to the Holy Grail War.']);
   };
 
-  // --- UI: LOGIN SCREEN ---
+  //  UI: LOGIN SCREEN 
   if (!inGame) {
     return (
       <div className="container login-theme">
         <h1 className="title">FATE<br/>ELEMENTAL CLASH</h1>
+        
         <div className="card login-box">
           <input value={room} onChange={e => setRoom(e.target.value)} placeholder="Room Name" />
           <input value={playerName} onChange={e => setPlayerName(e.target.value)} placeholder="Display Name (e.g. Nicholas)" />
@@ -123,7 +125,25 @@ function App() {
           </select>
 
           <button className="primary-btn" onClick={joinGame}>Enter the Grail War</button>
+          <button className="action-btn" onClick={() => setShowRules(true)} style={{ marginTop: '15px', width: '100%' }}>View Directives (How to Play)</button>
         </div>
+
+        {/* The Rules Modal Popup */}
+        {showRules && (
+          <div className="modal-overlay">
+            <div className="card modal-content">
+              <h3 style={{ borderBottom: '1px solid #d4af37', paddingBottom: '10px' }}>The Holy Grail Directives</h3>
+              <ul style={{ textAlign: 'left', lineHeight: '1.8', margin: '20px 0', color: 'var(--text-muted)' }}>
+                <li><strong style={{ color: 'var(--gold-royal)' }}>Phase 1 (Priority):</strong> Select Rock, Paper, or Scissors. The winner is the Vanguard (Attacker). The loser is the Guard.</li>
+                <li><strong style={{ color: 'var(--gold-royal)' }}>Phase 2 (Combat):</strong> Fire beats Earth. Water beats Fire. Earth beats Water.</li>
+                <li><strong style={{ color: 'var(--gold-royal)' }}>Advantage:</strong> Attackers dealing a super-effective hit deal 35 DMG.</li>
+                <li><strong style={{ color: 'var(--gold-royal)' }}>Counter-Attack:</strong> Defenders who successfully read and resist the attacker take 0 DMG and deal 20 DMG in return.</li>
+                <li><strong style={{ color: 'var(--gold-royal)' }}>Tie:</strong> Matching elements result in the Defender taking 10 DMG.</li>
+              </ul>
+              <button className="primary-btn" onClick={() => setShowRules(false)}>Acknowledge</button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
