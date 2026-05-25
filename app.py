@@ -15,7 +15,7 @@ RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'rabbitmq')
 
 socketio = SocketIO(app, cors_allowed_origins="*", message_queue=f'redis://{REDIS_HOST}:6379/0')
 
-# --- REDIS CONNECTION ---
+#  REDIS CONNECTION 
 db = redis.Redis(host=REDIS_HOST, port=6379, db=0, decode_responses=True)
 try:
     db.ping()
@@ -23,11 +23,11 @@ try:
 except redis.ConnectionError:
     print("Error: Could not connect to Redis.")
 
-# --- RABBITMQ CONNECTION ---
+#  RABBITMQ CONNECTION 
 print(f"Connecting to RabbitMQ at {RABBITMQ_HOST}...")
 while True:
     try:
-        rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
+        rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST, heartbeat=0))
         rabbitmq_channel = rabbitmq_connection.channel()
         rabbitmq_channel.queue_declare(queue='game_moves')
         print(f"Success: Connected to RabbitMQ at {RABBITMQ_HOST}!")
@@ -40,31 +40,38 @@ while True:
 def index():
     return "Fate Elemental Clash Backend is Running!"
 
-# --- WEBSOCKET EVENTS ---
+#  WEBSOCKET EVENTS 
 
+@socketio.on('join_game')
 @socketio.on('join_game')
 def handle_join(data):
     room = data['room']
-    player_id = data['player_id'] # e.g., 'player1' or 'player2'
+    player_id = data['player_id'] 
+    player_name = data.get('player_name', player_id) # Capture the custom name
     
-    join_room(room) # Places the player in a specific SocketIO room
+    join_room(room) 
     
-    # Initialize HP in Redis if it is a new game
-    if not db.exists(f"{room}_hp_player1"):
-        db.set(f"{room}_hp_player1", 10)
-        db.set(f"{room}_hp_player2", 10)
+    # THE IRONCLAD WIPE: Destroy any Ghost Memory the moment someone logs in
+    db.delete(f"{room}_hp_player1", f"{room}_hp_player2", f"{room}_attacker", f"{room}_defender")
+    db.delete(f"{room}_player1_rpc", f"{room}_player2_rpc", f"{room}_player1_element", f"{room}_player2_element")
+    
+    # PROPER INITIALIZATION: Set explicitly to 100 HP
+    db.set(f"{room}_hp_player1", 100)
+    db.set(f"{room}_hp_player2", 100)
         
-    print(f"{player_id} joined room: {room}")
-    emit('game_update', {'msg': f'{player_id} has joined the game :)'}, to=room)
+    print(f"{player_name} ({player_id}) joined room: {room}")
+    
+    # Broadcast the actual name to the chat!
+    emit('game_update', {'msg': f'{player_name} has entered the room as {player_id}.'}, to=room)
 
 @socketio.on('make_move')
 def handle_move(data):
     room = data['room']
     player_id = data['player_id'] 
-    move_type = data['move_type'] # Will be 'rpc' (rock/paper/scissors) or 'element'
-    choice = data['choice']       # e.g., 'rock', 'fire', 'water'
+    move_type = data['move_type'] 
+    choice = data['choice']       
 
-    # 1. Save the hidden choice in Redis (e.g., "room1_player1_rpc" = "rock")
+    # 1. Save the hidden choice in Redis
     db.set(f"{room}_{player_id}_{move_type}", choice)
     print(f"Saved to Redis: {player_id} chose {choice} for {move_type}")
     
@@ -81,9 +88,6 @@ def handle_move(data):
         body=move_event
     )
     print(f"Published to RabbitMQ: {move_event}")
-    
-    # 3. Notify BOTH players that a move was locked in (without revealing what it is!)
-    emit('move_locked', {'player_id': player_id, 'msg': 'Move locked in !!!'}, to=room)
 
 if __name__ == '__main__':
     print("Starting Fate Game Server...")

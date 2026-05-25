@@ -21,7 +21,7 @@ socketio = SocketIO(message_queue=f'redis://{REDIS_HOST}:6379/0')
 print(f"Connecting to RabbitMQ at {RABBITMQ_HOST}...")
 while True:
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST, heartbeat=0))
         channel = connection.channel()
         channel.queue_declare(queue='game_moves')
         print("Success: Connected to RabbitMQ!")
