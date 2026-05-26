@@ -3,7 +3,8 @@ import { io } from 'socket.io-client';
 import './App.css';
 
 // Connect to local Flask backend
-const socket = io('http://localhost:5000');
+const serverUrl = `http://${window.location.hostname}:5000`;
+const socket = io(serverUrl);
 
 function App() {
   const [room, setRoom] = useState('FateRoom1');
