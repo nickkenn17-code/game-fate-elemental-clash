@@ -1,6 +1,6 @@
 # Fate Elemental Clash
 
-Fate Elemental Clash is a real-time multiplayer web game I built for my software engineering assignment. The goal was to build a distributed system that could handle simultaneous player inputs without breaking or overwriting data. 
+Fate Elemental Clash is a real-time multiplayer web game. The goal is to build a distributed system that could handle simultaneous player inputs without breaking or overwriting data. 
 
 **Live Google Cloud Server:** [http://34.101.205.113:5173](http://34.101.205.113:5173)
 
