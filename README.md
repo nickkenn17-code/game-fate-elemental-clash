@@ -1,26 +1,26 @@
 # Fate Elemental Clash
 
-Fate Elemental Clash is a real-time multiplayer web game. The goal is to build a distributed system that could handle simultaneous player inputs without breaking or overwriting data. 
+Fate Elemental Clash is a real-time multiplayer web game built on a containerized microservice architecture. The primary objective of the project was to engineer a distributed system capable of handling simultaneous player inputs without data corruption or state overwriting.
 
 **Live Google Cloud Server:** [http://34.101.205.113:5173](http://34.101.205.113:5173)
 
 ## How It Works Under the Hood
 
-The whole application is containerized using Docker and is split into five distinct services:
+The entire application is containerized utilizing Docker and divided into five distinct microservices:
 
-* **React + Vite (Frontend):** A responsive UI that talks to the backend over WebSockets. It dynamically detects the host IP, so the same code works on my local laptop and the live cloud server without manual changes.
-* **Flask + SocketIO (Gateway):** The main hub that manages player rooms and broadcasts game updates back to the browsers.
-* **RabbitMQ (Message Queue):** I added this to prevent race conditions. If both players lock in an attack at the exact same millisecond, RabbitMQ lines up the requests chronologically so the engine processes them safely.
-* **Redis (Database):** A fast in-memory store used to track player health, elements, and active roles. 
-* **Python Engine (Worker):** A background script that pulls moves from the queue, calculates the elemental damage multipliers, updates Redis, and pushes the results back to the Flask server.
+* **React + Vite (Frontend):** A responsive UI that communicates with the backend over WebSockets. It dynamically detects the host IP, ensuring the exact same codebase functions seamlessly on both a local machine and the live cloud server.
+* **Flask + SocketIO (Gateway):** The primary server hub that manages player rooms and broadcasts game updates back to the clients.
+* **RabbitMQ (Message Queue):** Integrated to prevent race conditions. If both players execute an attack at the exact same millisecond, RabbitMQ queues the incoming requests chronologically so the backend engine processes them safely.
+* **Redis (Database):** A high-speed, in-memory data store utilized to track player health, elements, and active roles. 
+* **Python Engine (Worker):** A background script that consumes actions from the queue, calculates the elemental damage multipliers, updates Redis, and pushes the final results back to the Flask server.
 
-## Notable Fixes
-* **The "Ghost" Data Bug:** Originally, if a player closed their browser mid-game, their old health data would stay trapped in Redis and corrupt the next game. I implemented a hard reset protocol that automatically wipes stale room data the moment a new session initializes.
-* **Role Assignments:** The game logic requires strict `player1` and `player2` identifiers to run the math, but I wanted players to use their own names. The UI lets players enter custom display names while silently binding them to the strict backend roles via a manual selector.
+## Notable Engineering Solutions
+* **Ghost Memory Mitigation:** Previously, an abandoned browser session would leave stale health data trapped in Redis, corrupting subsequent matches. To resolve this, a hard reset protocol was implemented to automatically wipe room data the moment a new session initializes.
+* **Decoupled Identifiers:** The backend mathematical logic requires strict `player1` and `player2` identifiers. To improve user experience, the UI permits custom display names while silently binding them to the strict backend roles via a manual selector.
 
 ## Running it Locally
 
-If you want to run the stack on your own machine, you just need Docker installed.
+To run the stack locally, Docker must be installed on the host machine.
 
 1. Clone the repository:
    ```bash
