@@ -56,7 +56,7 @@ def process_move(ch, method, properties, body):
     if p1_choice and p2_choice:
         print(f"[Worker] Both players locked in {move_type}! Calculating...")
         
-        # --- PHASE 1: PRIORITY (ROCK PAPER SCISSORS) ---
+        # PHASE 1: PRIORITY (ROCK PAPER SCISSORS) 
         if move_type == 'rpc':
             winner = resolve_rpc(p1_choice, p2_choice)
             db.delete(f"{room}_player1_rpc", f"{room}_player2_rpc")
@@ -83,7 +83,7 @@ def process_move(ch, method, properties, body):
                 }, to=room)
                 print(f"[Worker] Roles assigned: {attacker} is Attacking!")
 
-        # --- PHASE 2: ELEMENTAL CLASH ---
+        #  PHASE 2: ELEMENTAL CLASH 
         elif move_type == 'element':
             attacker = db.get(f"{room}_attacker")
             
