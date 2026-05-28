@@ -26,4 +26,7 @@ To run the stack locally, Docker must be installed on the host machine.
    ```bash
    git clone [https://github.com/nickkenn17-code/game-fate-elemental-clash.git](https://github.com/nickkenn17-code/game-fate-elemental-clash.git)
    cd game-fate-elemental-clash
+
+2. Run the code:
+   ```bash
    docker compose up
